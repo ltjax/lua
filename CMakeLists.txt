@@ -135,18 +135,27 @@ else ( )
   list ( APPEND SRC_LIB src/loadlib.c )
 endif ( )
 
+set ( CMAKE_STATIC_LIBRARY_PREFIX "" )
+
 ## BUILD
 # Create dynamic library
-add_library ( liblua SHARED ${SRC_LIB} ${LUA_DLL_RC} ${LUA_DEF} )
-target_link_libraries ( liblua ${LIBS} )
-set_target_properties ( liblua PROPERTIES OUTPUT_NAME lua CLEAN_DIRECT_OUTPUT 1 )
-if ( LUA_BUILD_AS_DLL )
-  set_target_properties ( liblua PROPERTIES COMPILE_DEFINITIONS LUA_BUILD_AS_DLL )
+if (BUILD_SHARED_LIBS)
+
+  add_library ( liblua SHARED ${SRC_LIB} ${LUA_DLL_RC} ${LUA_DEF} )
+  target_link_libraries ( liblua ${LIBS} )
+  set_target_properties ( liblua PROPERTIES OUTPUT_NAME lua CLEAN_DIRECT_OUTPUT 1 )
+  if ( LUA_BUILD_AS_DLL )
+    set_target_properties ( liblua PROPERTIES COMPILE_DEFINITIONS LUA_BUILD_AS_DLL )
+  endif ( )
+
+  set ( STATIC_LIB_NAME liblua_static )
+else ( )
+  set ( STATIC_LIB_NAME liblua )
 endif ( )
 
 # Create static library, this is needed to compile luac in the 5.1.x Lua series
-add_library ( liblua_static STATIC ${SRC_LIB} )
-target_link_libraries ( liblua_static ${LIBS} )
+add_library ( ${STATIC_LIB_NAME} STATIC ${SRC_LIB} )
+target_link_libraries ( ${STATIC_LIB_NAME} ${LIBS} )
 
 add_executable ( lua ${SRC_LUA} ${LUA_RC} )
 target_link_libraries ( lua liblua )
@@ -159,7 +168,7 @@ if ( LUA_BUILD_WLUA )
 endif ( )
 
 add_executable ( luac ${SRC_LUAC} ${LUAC_RC} )
-target_link_libraries ( luac liblua_static )
+target_link_libraries ( luac ${STATIC_LIB_NAME} )
 
 install_executable ( lua luac )
 install_library ( liblua )
