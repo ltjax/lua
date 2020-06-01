@@ -4,9 +4,6 @@ environment:
     PYTHON: "C:\\Python37"
 
     CONAN_REFERENCE: "lua/5.1"
-    CONAN_USERNAME: "ltjax"
-    CONAN_LOGIN_USERNAME: "ltjax"
-    CONAN_CHANNEL: "testing"
     
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015

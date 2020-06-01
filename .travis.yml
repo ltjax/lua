@@ -2,9 +2,6 @@
 env:
    global:
      - CONAN_REFERENCE: "lua/5.1"
-     - CONAN_USERNAME: "ltjax"
-     - CONAN_LOGIN_USERNAME: "ltjax"
-     - CONAN_CHANNEL: "testing"
      
 linux: &linux
    os: linux
