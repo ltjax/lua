@@ -9,6 +9,11 @@ cmake_minimum_required ( VERSION 2.8 )
 include ( cmake/dist.cmake )
 include ( lua )
 
+if (LUA_CONAN)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup()
+endif()
+
 ## CONFIGURATION
 # Default configuration (we assume POSIX by default)
 set ( LUA_PATH "LUA_PATH" CACHE STRING "Environment variable to use as package.path." )
@@ -207,3 +212,8 @@ add_lua_test ( test/sort.lua )
 add_lua_test ( test/trace-calls.lua )
 add_lua_test ( test/trace-globals.lua )
 #add_lua_test ( test/xd.lua ) # Requires input
+
+message("C_FLAGS ${CMAKE_C_FLAGS}")
+message("C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE}")
+message("CXX_FLAGS ${CMAKE_CXX_FLAGS}")
+message("CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE}")

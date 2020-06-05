@@ -23,6 +23,7 @@ class LuaConan(ConanFile):
         cmake.configure(source_folder=".", defs={
             'BUILD_SHARED_LIBS': self.options.shared,
             'BUILD_TESTING': False,
+            'LUA_CONAN': True,
         })
         if self.settings.os == "Windows":
             cmake.definitions['LUA_BUILD_AS_DLL'] = self.options.shared
