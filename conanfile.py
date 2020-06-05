@@ -34,7 +34,7 @@ class LuaConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["lua"]
+        self.cpp_info.libs = ["liblua"]
 
     def configure(self):
         del self.settings.compiler.libcxx
