@@ -2,6 +2,7 @@
 env:
    global:
      - CONAN_REFERENCE: "lua/5.1"
+     - CONAN_ARCHS: "x86_64"
      
 linux: &linux
    os: linux
