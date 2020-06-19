@@ -35,7 +35,7 @@ class LuaConan(ConanFile):
         cmake.install()
 
     def package_info(self):
-        if self.options.shared:
+        if self.settings.os != "Windows" or self.options.shared:
             self.cpp_info.libs = ["lua"]
         else:
             self.cpp_info.libs = ["liblua"]
