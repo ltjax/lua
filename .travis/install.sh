@@ -19,10 +19,6 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv activate conan
 fi
 
-if [[ "$(uname -s)" == 'Linux' ]]; then
-    sudo apt-get install libreadline-dev libncurses5-dev -y
-fi
-
 pip install conan --upgrade
 pip install conan_package_tools
 
