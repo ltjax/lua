@@ -4,15 +4,10 @@
 # For details see the COPYRIGHT file distributed with LuaDist.
 # Please note that the package source code is licensed under its own license.
 
+cmake_minimum_required ( VERSION 3.25 )
 project ( lua C )
-cmake_minimum_required ( VERSION 2.8 )
 include ( cmake/dist.cmake )
 include ( lua )
-
-if (LUA_CONAN)
-  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-  conan_basic_setup()
-endif()
 
 ## CONFIGURATION
 # Default configuration (we assume POSIX by default)

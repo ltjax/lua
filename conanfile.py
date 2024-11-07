@@ -1,4 +1,6 @@
-from conans import ConanFile, CMake, tools
+from conan import ConanFile
+from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
+from conan.tools.microsoft import is_msvc
 
 
 class LuaConan(ConanFile):
@@ -12,22 +14,32 @@ class LuaConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = {"shared": False}
-    generators = "cmake"
     exports_sources = "src/*", "test/*", "etc/*", "cmake/*", "doc/*", "CMakeLists.txt", "dist.info", "README.md", "COPYRIGHT", "HISTORY"
 
     def source(self):
         pass
 
+    def configure(self):
+        if not is_msvc(self):
+            del self.settings.compiler.libcxx
+
+    def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
+
+        toolchain = CMakeToolchain(self)
+        toolchain.variables['BUILD_SHARED_LIBS'] = self.options.shared;
+        toolchain.variables['BUILD_TESTING'] = False;
+        
+        if self.settings.os == "Windows":
+            toolchain.variables['LUA_BUILD_AS_DLL'] = self.options.shared
+            toolchain.variables['LUA_BUILD_WLUA'] = False
+        
+        toolchain.generate()
+
     def build(self):
         cmake = CMake(self)
-        cmake.configure(source_folder=".", defs={
-            'BUILD_SHARED_LIBS': self.options.shared,
-            'BUILD_TESTING': False,
-            'LUA_CONAN': True,
-        })
-        if self.settings.os == "Windows":
-            cmake.definitions['LUA_BUILD_AS_DLL'] = self.options.shared
-            cmake.definitions['LUA_BUILD_WLUA'] = False
+        cmake.configure()
         cmake.build()
 
     def package(self):
@@ -39,6 +51,3 @@ class LuaConan(ConanFile):
             self.cpp_info.libs = ["lua"]
         else:
             self.cpp_info.libs = ["liblua"]
-
-    def configure(self):
-        del self.settings.compiler.libcxx
